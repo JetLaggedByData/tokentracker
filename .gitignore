@@ -1,0 +1,33 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# --- Virtual environments (never commit) ---
+.venv/
+venv/
+env/
+
+# --- PyInstaller build artifacts ---
+*.spec.bak
+*.manifest
+
+# --- TokenTracker runtime data (per-user, must never be committed) ---
+.tokentracker/
+ipc_token.txt
+secrets.json
+browser_counts.json
+*.log
+
+# --- Browser extension build output ---
+TokenTracker-extension/dist/
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

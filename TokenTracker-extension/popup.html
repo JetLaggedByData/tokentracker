@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenTracker</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    width: 300px;
+    font-family: -apple-system, "Segoe UI", sans-serif;
+    font-size: 13px;
+    background: #080b14;
+    color: #e8ecf4;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px 11px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+  .header-title { font-size: 14px; font-weight: 600; letter-spacing: .02em; }
+  .header-date  { font-size: 10px; color: #8896b3; font-family: monospace; }
+
+  .providers { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+
+  .pcard {
+    background: #131c30;
+    border-radius: 8px;
+    padding: 11px 13px;
+    border: 1px solid rgba(255,255,255,.06);
+  }
+  .pcard-top {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 7px;
+  }
+  .pcard-name {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 500;
+  }
+  .pdot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+  .bat-wrap { display: flex; align-items: center; gap: 8px; }
+  .bat-body {
+    flex: 1; height: 10px;
+    background: rgba(255,255,255,.07);
+    border-radius: 5px; overflow: hidden;
+  }
+  .bat-fill { height: 100%; border-radius: 5px; transition: width .4s ease; }
+  .bat-nub { width: 3px; height: 6px; background: rgba(255,255,255,.2); border-radius: 0 2px 2px 0; flex-shrink: 0; }
+  .bat-pct { font-family: monospace; font-size: 10px; color: #8896b3; min-width: 32px; text-align: right; }
+
+  .pcard-renew { font-size: 10px; margin-top: 5px; color: #8896b3; }
+
+  .fill-green { background: #00c878; }
+  .fill-amber { background: #e6a000; }
+  .fill-red   { background: #d22323; }
+
+  .usage-pill {
+    font-family: monospace; font-size: 11px; font-weight: 500;
+    padding: 3px 10px; border-radius: 12px; white-space: nowrap;
+  }
+  .pill-green { background: rgba(0,200,120,.14); color: #4ade80; border: 1px solid rgba(0,200,120,.3); }
+  .pill-amber { background: rgba(230,160,0,.14); color: #fbbf24; border: 1px solid rgba(230,160,0,.3); }
+  .pill-red   { background: rgba(210,35,35,.14); color: #f87171; border: 1px solid rgba(210,35,35,.3); }
+  .pill-unknown { background: rgba(255,255,255,.06); color: #8896b3; border: 1px solid rgba(255,255,255,.12); }
+
+  .source-tag {
+    font-size: 9px; color: #555f78; margin-top: 4px;
+  }
+
+  .sync-badge {
+    font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: 9px;
+    letter-spacing: .02em; white-space: nowrap; margin-left: 8px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .sync-badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; }
+  .badge-synced { background: rgba(0,200,120,.12); color: #4ade80; border: 1px solid rgba(0,200,120,.25); }
+  .badge-synced::before { background: #4ade80; }
+  .badge-est { background: rgba(230,160,0,.12); color: #fbbf24; border: 1px solid rgba(230,160,0,.25); }
+  .badge-est::before { background: #fbbf24; }
+
+  .disclaimer {
+    font-size: 9px; color: #4a5573; text-align: center; line-height: 1.4;
+    padding: 8px 14px 2px; border-top: 1px solid rgba(255,255,255,.05); margin-top: 4px;
+  }
+
+  .footer-btn {
+    width: 100%;
+    font-size: 11px; font-weight: 500;
+    background: none; color: #8896b3;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 6px; padding: 7px;
+    cursor: pointer; font-family: inherit;
+    margin-top: 4px;
+  }
+  .footer-btn:hover { background: rgba(255,255,255,.04); color: #e8ecf4; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-title">TokenTracker</span>
+  <span class="header-date" id="headerDate"></span>
+</div>
+
+<div class="providers" id="providerList"></div>
+
+<div style="padding: 0 12px 12px; display: flex; flex-direction: column; gap: 6px;">
+  <button class="footer-btn" id="checkNowBtn">Refresh Claude usage</button>
+  <button class="footer-btn" id="checkGeminiBtn">Refresh Gemini usage</button>
+</div>
+
+<div class="disclaimer">
+  Estimated usage based on your activity. Not affiliated with OpenAI,
+  Anthropic, or Google. Providers may change limits.
+</div>
+
+<script src="src/compat.js"></script>
+<script src="src/popup.js"></script>
+</body>
+</html>
